@@ -1,0 +1,10 @@
+.comingsoon-img {
+  width: 400px;
+  height: 300px;
+}
+
+.comingsoon-img-wrapper {
+  position: absolute;
+  top: 40%;
+  left: 43%;
+}
