@@ -3,50 +3,14 @@ import List from "@mui/material/List"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
-import Collapse from "@mui/material/Collapse"
-import ExpandLess from "@mui/icons-material/ExpandLess"
-import ExpandMore from "@mui/icons-material/ExpandMore"
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
 import "./side-nav-bar.css"
-import {
-  Analytics,
-  Dashboard,
-  SupervisorAccount,
-  Computer,
-  DesignServices,
-  AccountTree,
-  Addchart,
-  Add,
-} from "@mui/icons-material"
 import "@fontsource/roboto"
 
-/**
- * Component to create DropDown
- * @param {*} props
- * @returns
- * @private
- */
-const DropwDown = (props) => {
-  const [open, setOpen] = useState(props.isOpen)
-
-  const dropdownHandler = (state) => {
-    setOpen(!state)
-  }
-
-  return (
-    <>
-      <ListItemButton onClick={() => dropdownHandler(open)}>
-        <ListItemIcon>{props.icon}</ListItemIcon>
-        <ListItemText primary={props.menu} />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        {props.children}
-      </Collapse>
-    </>
-  )
-}
 
 /**
  * Component for Side navigation bar
@@ -110,32 +74,30 @@ const SideNavbar = () => {
       {/* Go to Dashboard page */}
       <MenuItem itemName={"New Invoice"} path="/">
         <ListItemIcon>
-          <Dashboard color="action" />
+          <ReceiptIcon color="action" />
         </ListItemIcon>
         <ListItemText primary="New Invoice" />
+      </MenuItem>
+      {/* Go to Machine management page*/}
+      <MenuItem itemName={"View Invoice"} path="/">
+        <ListItemIcon>
+          <VisibilityIcon color="action" />
+        </ListItemIcon>
+        <ListItemText primary="View Invoice" />
+      </MenuItem>
+      {/* Go to PR History management page*/}
+      <MenuItem itemName={"Edit Invoice"} path="/edit">
+        <ListItemIcon>
+          <EditNoteIcon  color="action" />
+        </ListItemIcon>
+        <ListItemText primary="Edit Invoice" />
       </MenuItem>
       {/* Go to Build Sheriff management page*/}
       <MenuItem itemName={"Add Client"} path="/">
         <ListItemIcon>
-          <SupervisorAccount color="action" />
+          <PersonAddIcon color="action" />
         </ListItemIcon>
         <ListItemText primary="Add Client" />
-      </MenuItem>
-
-      {/* Go to Machine management page*/}
-      <MenuItem itemName={"View Invoice"} path="/">
-        <ListItemIcon>
-          <Computer color="action" />
-        </ListItemIcon>
-        <ListItemText primary="View Invoice" />
-      </MenuItem>
-
-      {/* Go to PR History management page*/}
-      <MenuItem itemName={"Edit Invoice"} path="/">
-        <ListItemIcon>
-          <AccountTree color="action" />
-        </ListItemIcon>
-        <ListItemText primary="Edit Invoice" />
       </MenuItem>
     </List>
   )
