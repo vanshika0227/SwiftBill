@@ -1,27 +1,52 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import restApi from "./restApi";
 
-
-
-const initialState = {
-  clientDetails:[] ,
+const initialCleintState = {
+  clientData: [],
+  headers: [],
+  clientNames:[] ,
   billNumber: '',
-  clientName: ''
+  selectedClientName: '',
+  selectedClientDetails: {
+    GST_number: '',
+    PlaceOfSupply: '',
+    GST_Type: '',
+    Billing_Address: '',
+    Shipping_Address: ''
+  },
+  isUpdateClient: false
 }
 
-export const fetchClientDetails = createAsyncThunk('fetch/client',
-async () => {
-  let response = await restApi.get("client");
-  return response.data;
+const updateClienState = {
+
 }
-)
+
+export const updateClientsData = createAsyncThunk('update/client',
+  async (newClientData) => {
+    let response =  await restApi.post("client", newClientData)
+    return response.data;
+  }
+);
+
+export const fetchClientsData = createAsyncThunk('fetch/client',
+  async () => {
+    let response = await restApi.get("client");
+    return response.data;
+  }
+);
 
 const clientSlice = createSlice({
   name: "client",
-  initialState,
+  initialState: initialCleintState,
   reducers: {
-    setClientName: (state, actions) => {
-      state.clientName = actions.payload
+    isUpdateClient: (state, actions) => {
+      state.isUpdateClient = actions.payload
+    },
+    setSelectedClientDetails: (state, actions) => {
+      state.selectedClientName = (actions.payload === null ? '' : actions.payload)
+      if(!state.isUpdateClient){
+        state.selectedClientDetails = getSelectedClientDetails(state.selectedClientName, state.clientData, state.headers)
+      }
     },
     setclientDetails: (state, actions) => {
       state.clientDetails = actions.payload
@@ -31,16 +56,16 @@ const clientSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchClientDetails.pending, (state) => {
+    builder.addCase(fetchClientsData.pending, (state) => {
       state.loading = true
-      console.log(state);
     })
-    builder.addCase(fetchClientDetails.fulfilled, (state, actions) => {
-      state.builds = actions.payload
-      state.clientDetails = getClientNames(actions.payload)
+    builder.addCase(fetchClientsData.fulfilled, (state, actions) => {
+      state.clientData = actions.payload
+      state.headers = actions.payload.shift()
+      state.clientNames = getClientNames(actions.payload)
       state.loading = false
     })
-    builder.addCase(fetchClientDetails.rejected, (state, actions) => {
+    builder.addCase(fetchClientsData.rejected, (state, actions) => {
       state.loading = false
       state.error = actions.error.message
       console.log(state.error)
@@ -48,25 +73,29 @@ const clientSlice = createSlice({
   },
 })
 
-const getClientHeaders = (clientDetails) => {
-  let headers = clientDetails[0]
-  clientDetails.shift()
+const updateClientSlice = createSlice({
+  name: "updateClient",
+  initialState: updateClienState,
+  reducers: {
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateClientsData.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(updateClientsData.fulfilled, (state, actions) => {
+      state.loading = false
+    })
+    builder.addCase(updateClientsData.rejected, (state, actions) => {
+      state.loading = false
+      state.error = actions.error.message
+      console.log(state.error)
+    })
+  },
+})
 
-  return headers;
-};
-
-const getClientNames = (clientDetails) => {
-  let headers = getClientHeaders(clientDetails);
-  clientDetails.forEach((client, index) => {
-    if(client[headers.indexOf('Type')] === 'temprory'){
-      if(parseInt(client[headers.indexOf('BillsGenerated')]) >=1){
-        clientDetails.splice(index, 1);
-      }
-    }
-  });
-
+const getClientNames = (clientNames) => {
   let registerClientList = [];
-  clientDetails.forEach((client) => {
+  clientNames.forEach((client) => {
     registerClientList.push(client[0]);
   })
 
@@ -74,13 +103,43 @@ const getClientNames = (clientDetails) => {
 
 }
 
-export const getClientName = (state) => state.allClients.clientDetails
+const getSelectedClientDetails = (clientName, clientData, headers) => {
+  let selectedClientData = {
+    GST_number: '',
+    PlaceOfSupply: '',
+    GST_Type: '',
+    Billing_Address: '',
+    Shipping_Address: ''
+  }
+  clientData.forEach(client => {
+    if(client.includes(clientName)){
+      selectedClientData = {
+        GST_number: client[headers.indexOf('GST Number')],
+        PlaceOfSupply: client[headers.indexOf('Place of Supply')],
+        GST_Type: client[headers.indexOf('GST Type')],
+        Billing_Address: client[headers.indexOf('Billing Address')],
+        Shipping_Address: client[headers.indexOf('Shipping Address')],
+      }
+      return selectedClientData
+    }
+  });
 
+  return selectedClientData;
+}
 
 export const {
-    setClientName,
-    setclientDetails,
-    setbillNumber
+  isUpdateClient,
+  setSelectedClientDetails,
+  setclientDetails,
+  setbillNumber,
+  updateClientData
 } = clientSlice.actions
 
-export default clientSlice.reducer
+export const {updateActions} = updateClientSlice.actions
+
+const rootReducer = {
+  allClients: clientSlice.reducer,
+  updateClient: updateClientSlice.reducer,
+};
+
+export default rootReducer
