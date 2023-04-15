@@ -9,12 +9,20 @@ app.use(cors());
 app.use(express.json());
 
 const port = 8000;
-let filename = path.join(process.cwd(), 'dataBase', 'varis.xlsx');
+let filename = path.join(process.cwd(), 'dataBase', 'clientDetails.xlsx');
 
 app.get('/client', async (req, res) => {
     let content = await readXlsxFile(filename)
     res.send(content);
 });
+
+const getValue = (value) => {
+  if(value !== null){
+    return value.toString();
+  }
+
+  return value;
+}
 
 app.post('/client', async (req, res) => {
   let content = await readXlsxFile(filename)
@@ -23,7 +31,7 @@ app.post('/client', async (req, res) => {
     let rowData = []
     row.forEach((cell) => {
       rowData.push({
-          value: cell.toString(),
+          value: getValue(cell),
           type: String
         });
     });
@@ -33,27 +41,23 @@ app.post('/client', async (req, res) => {
   console.log(JSON.stringify(req.body));
   sheetData.push([
     {
-      value: req.body.clientName.toString(),
+      value: getValue(req.body.clientName),
       type: String
     },
     {
-      value: req.body.GST_number.toString(),
+      value: getValue(req.body.GST_number),
       type: String
     },
     {
-      value: req.body.PlaceOfSupply.toString(),
+      value: getValue(req.body.PlaceOfSupply),
       type: String
     },
     {
-      value: req.body.GST_Type.toString(),
+      value: getValue(req.body.GST_Type),
       type: String
     },
     {
-      value: req.body.Billing_Address.toString(),
-      type: String
-    },
-    {
-      value: req.body.Shipping_Address.toString(),
+      value: getValue(req.body.Billing_Address),
       type: String
     }
   ])

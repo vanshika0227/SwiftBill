@@ -1,6 +1,6 @@
 import React from "react"
-import { AppBar, Box, Toolbar, IconButton, Typography, Badge } from "@mui/material"
-import { Adb as AdbIcon, AccountCircle, Notifications as NotificationsIcon } from "@mui/icons-material"
+import { AppBar, Toolbar, Typography} from "@mui/material"
+import { Adb as AdbIcon } from "@mui/icons-material"
 import { styled } from "@mui/material/styles"
 import ErrorBoundary from "../errorBoundary/ErrorBoundary"
 
