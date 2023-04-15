@@ -3,8 +3,8 @@ import { Provider as ReduxProvider} from 'react-redux';
 import {store} from "./redux/store"
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter} from "react-router-dom";
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './application/App';
+import reportWebVitals from './application/reportWebVitals';
 
 const container = document.getElementById('root');
 const root = createRoot(container);

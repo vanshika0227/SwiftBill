@@ -9,7 +9,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Checkbox from '@mui/material/Checkbox';
 import { useSelector, useDispatch } from "react-redux"
-import { fetchClientsData, isUpdateClient, setSelectedClientDetails, updateClientsData } from '../redux/clientData';
+import { fetchClientsData, isUpdateClient, setSelectedClientDetails, updateClientsData } from '../../redux/clientData';
 import GeneratePDF from '../generatePdf/GeneratePDF';
 import { calculateBill } from './utils/priceCalculate';
 import "react-datepicker/dist/react-datepicker.css";
@@ -119,7 +119,7 @@ const New = () => {
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [hsnNumber, setHsnNumber] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(new Date());
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [pdfInputs, setPdfInputs] = useState([{}])
   const [error, setError] = useState({

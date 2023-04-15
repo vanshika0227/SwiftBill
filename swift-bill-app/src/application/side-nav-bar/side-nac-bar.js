@@ -4,7 +4,6 @@ import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import { Link } from "react-router-dom"
@@ -71,33 +70,26 @@ const SideNavbar = () => {
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
-      {/* Go to Dashboard page */}
+      {/* Create new invoice */}
       <MenuItem itemName={"New Invoice"} path="/">
         <ListItemIcon>
           <ReceiptIcon color="action" />
         </ListItemIcon>
         <ListItemText primary="New Invoice" />
       </MenuItem>
-      {/* Go to Machine management page*/}
-      <MenuItem itemName={"View Invoice"} path="/">
+      {/*View Invoice*/}
+      <MenuItem itemName={"View Invoice"} path="/view">
         <ListItemIcon>
           <VisibilityIcon color="action" />
         </ListItemIcon>
         <ListItemText primary="View Invoice" />
       </MenuItem>
-      {/* Go to PR History management page*/}
+      {/*Over-Write exsisting Invoice*/}
       <MenuItem itemName={"Edit Invoice"} path="/edit">
         <ListItemIcon>
           <EditNoteIcon  color="action" />
         </ListItemIcon>
         <ListItemText primary="Edit Invoice" />
-      </MenuItem>
-      {/* Go to Build Sheriff management page*/}
-      <MenuItem itemName={"Add Client"} path="/">
-        <ListItemIcon>
-          <PersonAddIcon color="action" />
-        </ListItemIcon>
-        <ListItemText primary="Add Client" />
       </MenuItem>
     </List>
   )
