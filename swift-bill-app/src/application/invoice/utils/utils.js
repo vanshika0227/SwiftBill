@@ -6,7 +6,7 @@ const getDateFormat = (date) => {
 }
 
 const getCommaSeparatedAmount = (amount) => {
-    let numberFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR', currencyDisplay: 'code' });
+    let numberFormat = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', currencyDisplay: 'code' });
 
     let requiredValue = numberFormat.format(amount).toString().split("INR")
 

@@ -22,6 +22,13 @@ import Select from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { getDateFormat, getCommaSeparatedAmount } from './utils/utils';
+import { styled } from '@mui/material/styles';
+
+const Div = styled('div')(({ theme }) => ({
+  ...theme.typography.h4,
+  color: theme.palette.primary.dark,
+  padding: theme.spacing(1)
+}));
 
 
 
@@ -100,7 +107,6 @@ const isValidationSuccess = (error) => {
 }
 
 const New = () => {
-  console.log('using slectore')
   const dispatch = useDispatch();
   const selectedClientName = useSelector((state) => state.allClients.selectedClientName)
   const selectedClientDetails = useSelector((state) => state.allClients.selectedClientDetails)
@@ -202,6 +208,9 @@ const New = () => {
       {formSubmitted ? <GeneratePDF data={pdfInputs}/> : 
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+        <Div variant="h4" component="h4"> Client Details </Div>
+        </Grid>
         <Grid item xs={12} sm={6}>
           <ClientDropDown/>
         </Grid>
@@ -289,7 +298,7 @@ const New = () => {
            />
         </Grid>
         <Grid item xs={12} sm={12}>
-            <Divider variant= 'middle'></Divider>
+          <Div variant="h4" component="h4">Invoice Details </Div>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -332,7 +341,7 @@ const New = () => {
           />
         </Grid>
         <Grid item xs={12} sm={12}>
-            <Divider variant= 'middle'></Divider>
+          <Div variant="h4" component="h4">Goods Details </Div>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -344,7 +353,7 @@ const New = () => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-        <FormControl fullWidth>
+        <FormControl fullWidth required>
           <InputLabel id="demo-simple-select-label">Pipe Size (inch)</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -352,7 +361,6 @@ const New = () => {
             value={pipeSize}
             label="Pipe Size (inch)"
             onChange={(event) => setPipeSize(event.target.value)}
-            required={true}
           >
             <MenuItem value={10}>2"</MenuItem>
             <MenuItem value={20}>3"</MenuItem>
