@@ -21,7 +21,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { getDateFormat } from './utils/utils';
+import { getDateFormat, getCommaSeparatedAmount } from './utils/utils';
 
 
 
@@ -172,6 +172,13 @@ const New = () => {
     }
 
     allValues.Date = getDateFormat(allValues.Date);
+    allValues.Net_Bill_Amount = getCommaSeparatedAmount(allValues.Net_Bill_Amount);
+    allValues.Total_Price = getCommaSeparatedAmount(allValues.Total_Price);
+    allValues.Price = getCommaSeparatedAmount(allValues.Price);
+    allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
+    allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
+    allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
+
     setPdfInputs([allValues])
     validateInputs(allValues);
     setFormSubmitted(isValidationSuccess(error));

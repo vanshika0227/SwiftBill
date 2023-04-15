@@ -5,6 +5,15 @@ const getDateFormat = (date) => {
     return requiredDate;
 }
 
+const getCommaSeparatedAmount = (amount) => {
+    let numberFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR', currencyDisplay: 'code' });
+
+    let requiredValue = numberFormat.format(amount).toString().split("INR")
+
+    return requiredValue[1];
+}
+
 module.exports = {
-    getDateFormat
+    getDateFormat,
+    getCommaSeparatedAmount
 }
