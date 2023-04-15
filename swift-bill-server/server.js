@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const port = 8000;
-let filename = path.join(process.cwd(), 'dataBase', 'varis.xlsx');
+let filename = path.join(process.cwd(), 'dataBase', 'clientDetails.xlsx');
 
 app.get('/client', async (req, res) => {
     let content = await readXlsxFile(filename)
