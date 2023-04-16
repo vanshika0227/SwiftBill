@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
-import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -12,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { fetchClientsData, isUpdateClient, setSelectedClientDetails, updateClientsData } from '../../redux/clientData';
 import GeneratePDF from '../generatePdf/GeneratePDF';
 import { calculateBill } from './utils/priceCalculate';
-import "react-datepicker/dist/react-datepicker.css";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -30,8 +28,14 @@ const Div = styled('div')(({ theme }) => ({
   padding: theme.spacing(1)
 }));
 
-
-
+const placeOfSupplyValues = ['JAMMU AND KASHMIR	(01)', 'HIMACHAL PRADESH	(02)', 'PUNJAB	(03)', 'CHANDIGARH	(04)',
+    'UTTARAKHAND	(05)', 'HARYANA	(06)', 'DELHI	(07)', 'RAJASTHAN	(08)', 'UTTAR PRADESH	(09)', 'BIHAR	(10)',
+    'SIKKIM	(11)', 'ARUNACHAL PRADESH	(12)', 'NAGALAND	(13)', 'MANIPUR	(14)', 'MIZORAM	(15)', 'TRIPURA	(16)',
+    'MEGHALAYA	(17)', 'ASSAM	(18)', 'WEST BENGAL	(19)', 'JHARKHAND	(20)', 'ODISHA	(21)', 'CHATTISGARH	(22)',
+    'MADHYA PRADESH	(23)', 'GUJARAT	(24)', 'DADRA AND NAGAR HAVELI AND DAMAN AND DIU	(26)', 'MAHARASHTRA	(27)',
+    'ANDHRA PRADESH	(28)', 'KARNATAKA	(29)', 'GOA	(30)', 'LAKSHADWEEP	(31)', 'KERALA	(32)', 'TAMIL NADU	(33)',
+    'PUDUCHERRY	(34)', 'ANDAMAN AND NICOBAR ISLANDS	(35)', 'TELANGANA	(36)', 'ANDHRA PRADESH	(37)', 'LADAKH 	(38)',
+    'OTHER TERRITORY	(97)', 'CENTRE JURISDICTION	(99)'] ;
 
 function ClientDropDown() {
   const dispatch = useDispatch();
@@ -156,6 +160,15 @@ const New = () => {
     setPlaceOfSupply(selectedClientDetails.PlaceOfSupply);
     setGSTtype(selectedClientDetails.GST_Type);
     setBillingAddress(selectedClientDetails.Billing_Address);
+    setShippingAddress('');
+    setDescription('');
+    setPipeSize('');
+    setPrice('');
+    setQuantity('');
+    setVehicleNumber('');
+    setHsnNumber('');
+    setInvoiceNumber('');
+    setDate(new Date());
   }, [selectedClientDetails]);
 
   const handleSubmit = (event) => {
@@ -196,6 +209,7 @@ const New = () => {
     setError((error) => ({ ...error, gstError: (value.GST_Number.length !== 15 && /^[A-Za-z0-9]*$/.test(value.GST_Number))}))
     setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
     setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
+    setError((error) => ({ ...error, placeOfSupplyError: !placeOfSupplyValues.includes(placeOfSupply)}))
   }
 
   const handleShippingSameAsBillingChange = (event) => {
@@ -222,18 +236,21 @@ const New = () => {
               value={GSTNumber}
               required={true}
               disabled={selectedClientDetails.GST_number !== ''}
-              onChange={(event) => setGSTnumber(event.target.value)}
+              onChange={(event) => setGSTnumber(event.target.value.toUpperCase())}
               fullWidth
+              inputProps={{ style: { textTransform: "uppercase" } }}
             />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            label="Place of supply"
-            value={placeOfSupply}
-            required={true}
-            disabled={selectedClientDetails.PlaceOfSupply !== ''}
-            onChange={(event) => setPlaceOfSupply(event.target.value)}
-            fullWidth
+          <Autocomplete
+             freeSolo
+             disablePortal
+             id="combo-box-demo"
+             options={placeOfSupplyValues}
+             fullWidth
+             renderInput={(params) => <TextField error={error.placeOfSupplyError} {...params} InputProps={{...params.InputProps, type: 'search'}} label="Place of supply" required />}
+             value={placeOfSupply}
+             onChange={(event, value) => setPlaceOfSupply(value)}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -325,7 +342,7 @@ const New = () => {
             label="Vehicle Number"
             value={vehicleNumber}
             required={true}
-            onChange={(event) => setVehicleNumber(event.target.value)}
+            onChange={(event) => setVehicleNumber(event.target.value.toUpperCase())}
             fullWidth
             inputProps={{ style: { textTransform: "uppercase" } }}
           />
