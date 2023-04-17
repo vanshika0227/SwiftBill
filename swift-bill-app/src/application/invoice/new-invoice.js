@@ -131,6 +131,7 @@ const New = () => {
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [date, setDate] = useState(new Date());
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isValid, setIsValid] = useState(false);
   const [pdfInputs, setPdfInputs] = useState([{}])
   const [error, setError] = useState({
     gstError: false,
@@ -171,45 +172,49 @@ const New = () => {
     setDate(new Date());
   }, [selectedClientDetails]);
 
+  useEffect(() => {
+    setFormSubmitted(false);
+    setIsValid(isValidationSuccess(error));
+  }, [error])
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if(isUpdateClient){
-      console.log('update client required')
-      let newClientData = {
-        clientName: selectedClientName,
-        GST_number: GSTNumber,
-        PlaceOfSupply: placeOfSupply,
-        GST_Type: GST_Type,
-        Billing_Address: billingAddress
+    validateInputs(formOutput[0]);
+
+    if(isValid) {
+      if(isUpdateClient){
+        console.log('update client required')
+        let newClientData = {
+          clientName: selectedClientName,
+          GST_number: GSTNumber,
+          PlaceOfSupply: placeOfSupply,
+          GST_Type: GST_Type,
+          Billing_Address: billingAddress
+        }
+        dispatch(updateClientsData(newClientData));
       }
-      dispatch(updateClientsData(newClientData));
-    }
-    let billValues = calculateBill(formOutput[0]);
-    let allValues = {
-      ...billValues,
-      ...formOutput[0]
-    }
+      let billValues = calculateBill(formOutput[0]);
+      let allValues = {
+        ...billValues,
+        ...formOutput[0]
+      }
 
-    allValues.Date = getDateFormat(allValues.Date);
-    allValues.Net_Bill_Amount = getCommaSeparatedAmount(allValues.Net_Bill_Amount);
-    allValues.Total_Price = getCommaSeparatedAmount(allValues.Total_Price);
-    allValues.Price = getCommaSeparatedAmount(allValues.Price);
-    allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
-    allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
-    allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
-
-    setPdfInputs([allValues])
-    validateInputs(allValues);
-    setFormSubmitted(isValidationSuccess(error));
-    
-    
+      allValues.Date = getDateFormat(allValues.Date);
+      allValues.Net_Bill_Amount = getCommaSeparatedAmount(allValues.Net_Bill_Amount);
+      allValues.Total_Price = getCommaSeparatedAmount(allValues.Total_Price);
+      allValues.Price = getCommaSeparatedAmount(allValues.Price);
+      allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
+      allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
+      allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
+      setPdfInputs([allValues])   
+      setFormSubmitted(true);
+    }
   };
 
   const validateInputs = (value) => {
     setError((error) => ({ ...error, gstError: (value.GST_Number.length !== 15 && /^[A-Za-z0-9]*$/.test(value.GST_Number))}))
     setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
     setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
-    setError((error) => ({ ...error, placeOfSupplyError: !placeOfSupplyValues.includes(placeOfSupply)}))
   }
 
   const handleShippingSameAsBillingChange = (event) => {
@@ -248,7 +253,7 @@ const New = () => {
              id="combo-box-demo"
              options={placeOfSupplyValues}
              fullWidth
-             renderInput={(params) => <TextField error={error.placeOfSupplyError} {...params} InputProps={{...params.InputProps, type: 'search'}} label="Place of supply" required />}
+             renderInput={(params) => <TextField {...params} InputProps={{...params.InputProps, type: 'search'}} label="Place of supply" required />}
              value={placeOfSupply}
              onChange={(event, value) => setPlaceOfSupply(value)}
           />
