@@ -41,8 +41,8 @@ function ClientDropDown() {
   const dispatch = useDispatch();
   const clientDetails = useSelector((state) => state.allClients.clientNames)
   const [saveClient, setSaveClient] = useState(false);
-  const [selectedClientName, setSelectedClientName] = useState('');
-  const [newClientName, setNewClientName] = useState('');
+  const [selectedClientName, setSelectedClientName] = useState();
+  const [newClientName, setNewClientName] = useState();
 
   const handleSelectedClientName = (event, value) => {
     setSaveClient(false);
@@ -170,6 +170,11 @@ const New = () => {
     setHsnNumber('');
     setInvoiceNumber('');
     setDate(new Date());
+    setError({
+      gstError: false,
+      quantityError: false,
+      priceError: false
+    })
   }, [selectedClientDetails]);
 
   useEffect(() => {
@@ -248,7 +253,7 @@ const New = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Autocomplete
-             freeSolo
+             disabled={placeOfSupply!==''} 
              disablePortal
              id="combo-box-demo"
              options={placeOfSupplyValues}
