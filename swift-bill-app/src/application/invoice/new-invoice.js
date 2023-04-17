@@ -37,12 +37,12 @@ const placeOfSupplyValues = ['JAMMU AND KASHMIR	(01)', 'HIMACHAL PRADESH	(02)', 
     'PUDUCHERRY	(34)', 'ANDAMAN AND NICOBAR ISLANDS	(35)', 'TELANGANA	(36)', 'ANDHRA PRADESH	(37)', 'LADAKH 	(38)',
     'OTHER TERRITORY	(97)', 'CENTRE JURISDICTION	(99)'] ;
 
-function ClientDropDown() {
+function ClientDropDown(props) {
   const dispatch = useDispatch();
   const clientDetails = useSelector((state) => state.allClients.clientNames)
   const [saveClient, setSaveClient] = useState(false);
-  const [selectedClientName, setSelectedClientName] = useState();
-  const [newClientName, setNewClientName] = useState();
+  const [selectedClientName, setSelectedClientName] = useState(props.clientName);
+  const [newClientName, setNewClientName] = useState(props.clientName);
 
   const handleSelectedClientName = (event, value) => {
     setSaveClient(false);
@@ -236,7 +236,7 @@ const New = () => {
         <Div variant="h4" component="h4"> Client Details </Div>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <ClientDropDown/>
+          <ClientDropDown clientName={selectedClientName}/>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
