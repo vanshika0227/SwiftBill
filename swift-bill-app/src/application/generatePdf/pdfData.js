@@ -178,19 +178,19 @@ const setGstCalculations = (doc, pdfData, yCoordinate, lastcolumnWidth) =>{
     }
 
     gstCalculationText.push(`Add   :  Rounded Off (${pdfData.Operator_Sign})`)
-    gstCalculationValues.push(`${pdfData.Operator_Sign} ${pdfData.Deviation_Value}`)
+    gstCalculationValues.push(`${pdfData.Operator_Sign} ${pdfData.Deviation_Value} `)
     yCoordinate += 5
     let xCoordinate = 15;
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text(`${pdfData.Total_Price}`, dividerCoordinate+30, yCoordinate,{align: 'right'})
+    doc.text(`${pdfData.Total_Price}`, doc.internal.pageSize.getWidth()-12, yCoordinate,{align: 'right'})
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'italic');
-    doc.text(gstCalculationText, xCoordinate+85 ,yCoordinate)
+    doc.text(gstCalculationText, dividerCoordinate - gstCalculationText[1].length*3.5, yCoordinate,{align: 'left'})
     doc.setFontSize(10)
     doc.setFont('helvetica', 'Normal');
-    doc.text(gstCalculationValues, dividerCoordinate+30, yCoordinate,{align: 'right'})
+    doc.text(gstCalculationValues, doc.internal.pageSize.getWidth()-12, yCoordinate,{align: 'right'})
 
 
     return yCoordinate+18;
@@ -207,7 +207,7 @@ const setTotalAmount = (doc, pdfData, yCoordinate,lastcolumnWidth) =>{
     let xCoordinate = 15;
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text(grandTotalText, xCoordinate+85 ,yCoordinate)
+    doc.text(grandTotalText, dividerCoordinate - grandTotalText[0].length*2.5 ,yCoordinate,{align: 'left'})
     doc.text(grandTotalValue, doc.internal.pageSize.getWidth() -12, yCoordinate,{align: 'right'})
     doc.text("AMOUNT IN ENGLISH", xCoordinate ,yCoordinate+15)
     return yCoordinate+20;

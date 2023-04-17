@@ -1,7 +1,7 @@
 const roundOffAmount = (billAmount) => {
     let roundOffValue = {
-        Operator_Sign: '+/-',
-        Deviation_Value: 0.00,
+        Operator_Sign: '',
+        Deviation_Value: parseFloat((0.00).toFixed(2)),
         Net_Bill_Amount: billAmount
     }
     let billIntergerValue = parseInt(billAmount);
