@@ -61,7 +61,6 @@ function ClientDropDown(props) {
   };
 
   const handleCheckboxChange = (event) => {
-    console.log('inside change');
     dispatch(isUpdateClient(true));
   };
 
@@ -94,7 +93,6 @@ function ClientDropDown(props) {
 const isNumberUpto2Decimal = (value) => {
   if(value.toString().includes('.')){
     if((value.toString().length - value.toString().indexOf('.') -1) >2){
-      console.log('error found');
       return true
     }
   } 
@@ -107,7 +105,6 @@ const New = () => {
   const selectedClientName = useSelector((state) => state.allClients.selectedClientName)
   const selectedClientDetails = useSelector((state) => state.allClients.selectedClientDetails)
   const isUpdateClient = useSelector((state) => state.allClients.isUpdateClient)
-  console.log(selectedClientDetails);
   const [GSTNumber, setGSTnumber] = useState('');
   const [placeOfSupply, setPlaceOfSupply] = useState('');
   const [GST_Type, setGSTtype] = useState('');
@@ -181,7 +178,6 @@ const New = () => {
     event.preventDefault();
     validateInputs(formOutput[0]);
     if(isUpdateClient){
-      console.log('update client required')
       let newClientData = {
         clientName: selectedClientName,
         GST_number: GSTNumber,
