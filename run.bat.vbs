@@ -1,3 +1,3 @@
 Set WshShell = CreateObject("WScript.Shell")
-WshShell.Run chr(34) & "runSwiftBill.bat" & Chr(34), 0
+WshShell.Run "cmd /c start /b runSwiftBill.bat > output.log", 0, False
 Set WshShell = Nothing
