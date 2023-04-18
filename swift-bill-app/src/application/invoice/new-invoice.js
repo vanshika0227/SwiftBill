@@ -170,13 +170,7 @@ const New = () => {
     if(Object.values(error).includes(true)){
       return false;
     }
-  
-    return true;
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    validateInputs(formOutput[0]);
+    
     if(isUpdateClient){
       let newClientData = {
         clientName: selectedClientName,
@@ -187,6 +181,7 @@ const New = () => {
       }
       dispatch(updateClientsData(newClientData));
     }
+
     let billValues = calculateBill(formOutput[0]);
     let allValues = {
       ...billValues,
@@ -200,14 +195,21 @@ const New = () => {
     allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
     allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
     allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
-    setPdfInputs([allValues])   
+    setPdfInputs([allValues]);
+    
+    return true;
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    validateInputs(formOutput[0]);
     setFormSubmitted(true);
   };
 
   const validateInputs = (value) => {
-    setError((error) => ({ ...error, gstError: (value.GST_Number === '' || value.GST_Number.length !== 15 || !/^[A-Za-z0-9]*$/.test(value.GST_Number))}))
-    setError((error) => ({ ...error, priceError: value.Price === '' || isNumberUpto2Decimal(value.Price)}))
-    setError((error) => ({ ...error, quantityError: value.Quantity === '' || isNumberUpto2Decimal(value.Quantity)}))
+    setError((error) => ({ ...error, gstError: (value.GST_Number.length !== 15 || !/^[A-Za-z0-9]*$/.test(value.GST_Number))}))
+    setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
+    setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
   }
 
   const handleShippingSameAsBillingChange = (event) => {
