@@ -9,37 +9,39 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import { Link } from "react-router-dom"
 import "./side-nav-bar.css"
 import "@fontsource/roboto"
-
+import { useLocation } from "react-router-dom"
 
 /**
  * Component for Side navigation bar
  * @returns
  */
 const SideNavbar = () => {
-  const [selected, setSelected] = useState("New Invoice")
+  
 
   const MenuItem = (props) => {
-    useEffect(() => {
-      const storedSelectedOption =
-        sessionStorage.getItem("selected") || "New Invoice" // if page get refereshed, retrive the information of active ListItem from local storage
-      setSelected(storedSelectedOption)
-    }, [])
-
+    const location = useLocation()
+    // useEffect(() => {
+    //   const storedSelectedOption =
+    //     sessionStorage.getItem("selected") || "/new" // if page get refereshed, retrive the information of active ListItem from local storage
+    //     sessionStorage.setItem("selected", storedSelectedOption)
+    // }, [])
+    
     /**
      * set the current ListItem as active and store the information in local storage
      * @funtion handleItemClick
      * @param {Integer} value - value of selected listItem.
      */
     const handleItemClick = (value) => {
-      setSelected(value)
-      sessionStorage.setItem("selected", value)
+      if(value === location.pathname){
+        window.location.reload()
+      }
     }
 
     return (
       <>
         <ListItemButton
-          onClick={() => handleItemClick(props.itemName)}
-          selected={selected === props.itemName}
+          onClick={() => handleItemClick(props.path)}
+          selected={ props.path === location.pathname}
           sx={{
             "&.Mui-selected": {
               backgroundColor: "white",
@@ -71,21 +73,21 @@ const SideNavbar = () => {
       aria-labelledby="nested-list-subheader"
     >
       {/* Create new invoice */}
-      <MenuItem itemName={"New Invoice"} path="/">
+      <MenuItem itemName={"new"} path="/">
         <ListItemIcon>
           <ReceiptIcon color="action" />
         </ListItemIcon>
         <ListItemText primary="New Invoice" />
       </MenuItem>
       {/*View Invoice*/}
-      <MenuItem itemName={"View Invoice"} path="/view">
+      <MenuItem itemName={"view"} path="/view">
         <ListItemIcon>
           <VisibilityIcon color="action" />
         </ListItemIcon>
         <ListItemText primary="View Invoice" />
       </MenuItem>
       {/*Over-Write exsisting Invoice*/}
-      <MenuItem itemName={"Edit Invoice"} path="/edit">
+      <MenuItem itemName={"edit"} path="/edit">
         <ListItemIcon>
           <EditNoteIcon  color="action" />
         </ListItemIcon>
