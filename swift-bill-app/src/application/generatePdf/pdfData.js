@@ -208,7 +208,7 @@ const setTotalAmount = (doc, pdfData, yCoordinate,lastcolumnWidth) =>{
     doc.setFont('helvetica', 'bold');
     doc.text(grandTotalText, dividerCoordinate - grandTotalText[0].length*2.5 ,yCoordinate,{align: 'left'})
     doc.text(grandTotalValue, doc.internal.pageSize.getWidth() -12, yCoordinate,{align: 'right'})
-    doc.text(pdfData.Amount_Words, xCoordinate ,yCoordinate+15)
+    doc.text(pdfData.Amount_Words, xCoordinate ,yCoordinate+13, {maxWidth: dividerCoordinate})
     return yCoordinate+20;
 }
 
