@@ -20,11 +20,6 @@ const SideNavbar = () => {
 
   const MenuItem = (props) => {
     const location = useLocation()
-    // useEffect(() => {
-    //   const storedSelectedOption =
-    //     sessionStorage.getItem("selected") || "/new" // if page get refereshed, retrive the information of active ListItem from local storage
-    //     sessionStorage.setItem("selected", storedSelectedOption)
-    // }, [])
     
     /**
      * set the current ListItem as active and store the information in local storage
