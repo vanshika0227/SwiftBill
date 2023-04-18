@@ -19,7 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { getDateFormat, getCommaSeparatedAmount } from './utils/utils';
+import { getDateFormat, getCommaSeparatedAmount,getAmountInWords } from './utils/utils';
 import { styled } from '@mui/material/styles';
 
 const Div = styled('div')(({ theme }) => ({
@@ -149,6 +149,7 @@ const New = () => {
     setPlaceOfSupply(selectedClientDetails.PlaceOfSupply);
     setGSTtype(selectedClientDetails.GST_Type);
     setBillingAddress(selectedClientDetails.Billing_Address);
+    setShippingSameAsBilling(false);
     setShippingAddress('');
     setDescription('');
     setPipeSize('');
@@ -194,6 +195,7 @@ const New = () => {
     }
 
     allValues.Date = getDateFormat(allValues.Date);
+    allValues.Amount_Words = getAmountInWords(allValues.Net_Bill_Amount);
     allValues.Net_Bill_Amount = getCommaSeparatedAmount(allValues.Net_Bill_Amount);
     allValues.Total_Price = getCommaSeparatedAmount(allValues.Total_Price);
     allValues.Price = getCommaSeparatedAmount(allValues.Price);

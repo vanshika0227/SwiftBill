@@ -180,7 +180,6 @@ const setGstCalculations = (doc, pdfData, yCoordinate, lastcolumnWidth) =>{
     gstCalculationText.push(`Add   :  Rounded Off (${pdfData.Operator_Sign})`)
     gstCalculationValues.push(`${pdfData.Operator_Sign} ${pdfData.Deviation_Value} `)
     yCoordinate += 5
-    let xCoordinate = 15;
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.text(`${pdfData.Total_Price}`, doc.internal.pageSize.getWidth()-12, yCoordinate,{align: 'right'})
@@ -209,7 +208,7 @@ const setTotalAmount = (doc, pdfData, yCoordinate,lastcolumnWidth) =>{
     doc.setFont('helvetica', 'bold');
     doc.text(grandTotalText, dividerCoordinate - grandTotalText[0].length*2.5 ,yCoordinate,{align: 'left'})
     doc.text(grandTotalValue, doc.internal.pageSize.getWidth() -12, yCoordinate,{align: 'right'})
-    doc.text("AMOUNT IN ENGLISH", xCoordinate ,yCoordinate+15)
+    doc.text(pdfData.Amount_Words, xCoordinate ,yCoordinate+15)
     return yCoordinate+20;
 }
 
@@ -219,10 +218,6 @@ const setFooters = (doc, pdfData, yCoordinate) =>{
     doc.rect(center, yCoordinate, center-10, 40 )
 
     const termsAndConditionsHeading = ['Terms & Conditions']
-    const termsAndConditions = ['E.& O.E.',
-    '1. Goods once sold will not be taken back.',
-    '2. Interest @ 18% p.a. will be charged if the payment is not made with in the stipulated time.',
-    '3. Subject to Ratia, Haryana Jurisdiction only.']
 
     const receiverSignature = ['Receiver\'s Signature : ']
 
