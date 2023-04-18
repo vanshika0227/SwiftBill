@@ -1,7 +1,7 @@
 import React from "react"
 import Footer from "../footer/Footer"
 import Header from "../header/Header"
-import SideNavbar from "../side-nav-bar/side-nac-bar"
+import SideNavbar from "../side-nav-bar/side-nav-bar"
 import "@fontsource/roboto"
 import { Grid, Container } from "@mui/material"
 import { Outlet, useLocation} from "react-router-dom"
