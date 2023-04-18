@@ -181,7 +181,12 @@ const New = () => {
       }
       dispatch(updateClientsData(newClientData));
     }
+    return true;
+  }
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    validateInputs(formOutput[0]);
     let billValues = calculateBill(formOutput[0]);
     let allValues = {
       ...billValues,
@@ -195,14 +200,7 @@ const New = () => {
     allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
     allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
     allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
-    setPdfInputs([allValues]);
-    
-    return true;
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    validateInputs(formOutput[0]);
+    setPdfInputs([allValues])   
     setFormSubmitted(true);
   };
 
