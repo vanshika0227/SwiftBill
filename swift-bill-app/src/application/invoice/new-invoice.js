@@ -123,7 +123,6 @@ const New = () => {
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [date, setDate] = useState(new Date());
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [isValid, setIsValid] = useState(false);
   const [pdfInputs, setPdfInputs] = useState([{}])
   const [error, setError] = useState({
     gstError: false,
@@ -239,12 +238,9 @@ const New = () => {
               value={GSTNumber}
               required={true}
               disabled={selectedClientDetails.GST_number !== ''}
-              onChange={(event) => {
-                setGSTnumber(event.target.value.toUpperCase())
-                setError({ ...error, gstError:(event.target.value.length !== 15 || !/^[A-Za-z0-9]*$/.test(event.target.value))})
-              }}
+              onChange={(event) => { setGSTnumber(event.target.value.toUpperCase())}}
               fullWidth
-              inputProps={{ style: { textTransform: "uppercase" } }}
+              inputProps={{ style: { textTransform: "uppercase" }, maxLength: 15 }}
             />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -350,7 +346,7 @@ const New = () => {
             required={true}
             onChange={(event) => setVehicleNumber(event.target.value.toUpperCase())}
             fullWidth
-            inputProps={{ style: { textTransform: "uppercase" } }}
+            inputProps={{ style: { textTransform: "uppercase" }, maxLength: 15 }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
