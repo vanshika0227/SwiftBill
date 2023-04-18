@@ -1,5 +1,8 @@
 echo "Running swift bill application"
 
+start  /B /wait cmd /c "npm install -g npx"
+start  /B /wait cmd /c "npm install -g kill-port"
+start  /B /wait cmd /c "npx kill-port 3000"
 cd "swift-bill-app"
 start  /B /wait cmd /c "npm install --frozen-lock"
 cd "..\swift-bill-server"
