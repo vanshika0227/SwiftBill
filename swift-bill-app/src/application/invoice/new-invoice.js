@@ -166,7 +166,8 @@ const New = () => {
       gstError: false,
       quantityError: false,
       priceError: false
-      })
+      });
+      setFormSubmitted(false);
   }, [selectedClientDetails]);
 
   const isValidationSuccess = () => {
@@ -176,11 +177,6 @@ const New = () => {
   
     return true;
   }
-
-  // useEffect(() => {
-  //   console.log('occuring');
-  //   setIsValid(isValidationSuccess(error));
-  // }, [error])
 
   const handleSubmit = (event) => {
     event.preventDefault();
