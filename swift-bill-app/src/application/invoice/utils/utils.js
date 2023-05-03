@@ -41,8 +41,20 @@ const getAmountInWords = (amount) => {
 
 };
 
+const quantityUnit = [
+  {
+    value: 'Kg',
+    label: 'Kgs',
+  },
+  {
+    value: 'Pieces',
+    label: 'Pcs',
+  }
+];
+
 export{
     getDateFormat,
     getCommaSeparatedAmount,
-    getAmountInWords
+    getAmountInWords,
+    quantityUnit
 }

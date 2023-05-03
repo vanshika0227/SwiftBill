@@ -19,7 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { getDateFormat, getCommaSeparatedAmount,getAmountInWords } from './utils/utils';
+import { getDateFormat, getCommaSeparatedAmount,getAmountInWords,quantityUnit } from './utils/utils';
 import { styled } from '@mui/material/styles';
 
 const Div = styled('div')(({ theme }) => ({
@@ -28,8 +28,8 @@ const Div = styled('div')(({ theme }) => ({
   padding: theme.spacing(1)
 }));
 
-const placeOfSupplyValues = ['JAMMU AND KASHMIR	(01)', 'HIMACHAL PRADESH	(02)', 'PUNJAB	(03)', 'CHANDIGARH	(04)',
-    'UTTARAKHAND	(05)', 'HARYANA	(06)', 'DELHI	(07)', 'RAJASTHAN	(08)', 'UTTAR PRADESH	(09)', 'BIHAR	(10)',
+const placeOfSupplyValues = ['HARYANA	(06)', 'JAMMU & KASHMIR (01)', 'HIMACHAL PRADESH	(02)', 'PUNJAB	(03)', 'CHANDIGARH	(04)',
+    'UTTARAKHAND	(05)', 'DELHI	(07)', 'RAJASTHAN	(08)', 'UTTAR PRADESH	(09)', 'BIHAR	(10)',
     'SIKKIM	(11)', 'ARUNACHAL PRADESH	(12)', 'NAGALAND	(13)', 'MANIPUR	(14)', 'MIZORAM	(15)', 'TRIPURA	(16)',
     'MEGHALAYA	(17)', 'ASSAM	(18)', 'WEST BENGAL	(19)', 'JHARKHAND	(20)', 'ODISHA	(21)', 'CHATTISGARH	(22)',
     'MADHYA PRADESH	(23)', 'GUJARAT	(24)', 'DADRA AND NAGAR HAVELI AND DAMAN AND DIU	(26)', 'MAHARASHTRA	(27)',
@@ -115,6 +115,7 @@ const New = () => {
   const [pipeSize, setPipeSize] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [units, setUnits] = useState('Kgs');
   const [vehicleNumber, setVehicleNumber] = useState('');
   const [hsnNumber, setHsnNumber] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -137,6 +138,7 @@ const New = () => {
     Pipe_Size: pipeSize,
     Price: price,
     Quantity: quantity,
+    Units: units,
     Vehicle_Number: vehicleNumber,
     HSN_Number: hsnNumber,
     Invoice_Number: invoiceNumber,
@@ -155,6 +157,7 @@ const New = () => {
     setPipeSize('');
     setPrice('');
     setQuantity('');
+    setUnits('Kgs');
     setVehicleNumber('');
     setHsnNumber('');
     setInvoiceNumber('');
@@ -207,7 +210,7 @@ const New = () => {
   };
 
   const validateInputs = (value) => {
-    setError((error) => ({ ...error, gstError: (value.GST_Number.length !== 15 || !/^[A-Za-z0-9]*$/.test(value.GST_Number))}))
+    setError((error) => ({ ...error, gstError: (!( value.GST_Number === 'URP' || (value.GST_Number.length === 15 && /^[A-Za-z0-9]*$/.test(value.GST_Number))))}))
     setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
     setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
   }
@@ -216,6 +219,11 @@ const New = () => {
     setShippingAddress(billingAddress);
     setShippingSameAsBilling(event.target.checked);
   };
+
+  const handlePlaceOfSupplyChange = (event, value) => {
+    setPlaceOfSupply(value);
+    value.toLowerCase().includes('haryana')? setGSTtype('CGST_SGST') : setGSTtype('IGST');
+  }
 
   return (
     <div style={{paddingLeft: '2rem', paddingTop: '2rem', padding: '2rem'}}>
@@ -231,7 +239,7 @@ const New = () => {
         <Grid item xs={12} sm={6}>
           <TextField
               error={error.gstError}
-              helperText="Enter 15 character value without special characters"
+              helperText="Enter URP or 15 character value without special characters"
               label="GST Number"
               value={GSTNumber}
               required={true}
@@ -243,29 +251,27 @@ const New = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Autocomplete
-             disabled={placeOfSupply!==''} 
+             disabled={selectedClientDetails.PlaceOfSupply!==''}
              disablePortal
              id="combo-box-demo"
              options={placeOfSupplyValues}
              fullWidth
              renderInput={(params) => <TextField {...params} InputProps={{...params.InputProps, type: 'search'}} label="Place of supply" required />}
              value={placeOfSupply}
-             onChange={(event, value) => setPlaceOfSupply(value)}
+             onChange={handlePlaceOfSupplyChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl>
+          <FormControl required>
             <FormLabel id="demo-row-radio-buttons-group-label">GST Type</FormLabel>
             <RadioGroup
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
               value={GST_Type}
-              onChange={(event) => setGSTtype(event.target.value)}
-              
             >
-              <FormControlLabel value="IGST" control={<Radio />} label="IGST" disabled={selectedClientDetails.GST_Type !== ''}/>
-              <FormControlLabel value="CGST_SGST" control={<Radio />} label="CGST+SGST" disabled={selectedClientDetails.GST_Type !== ''}/>
+              <FormControlLabel value="IGST" control={<Radio />} label="IGST" disabled/>
+              <FormControlLabel value="CGST_SGST" control={<Radio />} label="CGST+SGST" disabled/>
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -392,15 +398,8 @@ const New = () => {
             <MenuItem value={110}>12"</MenuItem>
           </Select>
         </FormControl>
-          {/* <TextField
-            label="Pipe Size (inch)"
-            value={pipeSize}
-            required={true}
-            onChange={(event) => setPipeSize(event.target.value)}
-            fullWidth
-          /> */}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={9.6} sm={5}>
           <TextField
             error={error.quantityError}
             helperText="Quantity upto 2 decimal places only"
@@ -411,6 +410,23 @@ const New = () => {
             onChange={(event) => setQuantity(event.target.value)}
             fullWidth
           />
+        </Grid>
+        <Grid item xs={2.4} sm={1}>
+          <TextField
+             required
+             label="Units"
+             fullWidth
+             select
+             value={units}
+             onChange={(event) => setUnits(event.target.value)}
+          >
+            {quantityUnit.map((option) => (
+            <MenuItem key={option.value} value={option.label}>
+              {option.label}
+            </MenuItem>
+          ))}
+
+          </TextField>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
