@@ -121,7 +121,7 @@ const setAddresses = (doc, pdfData, yCoordinate) => {
 const setInVoiceAmount = (doc, pdfData, yCoordinate) => {
     
     const headers = [['S.No.', 'Description of Goods', 'HSN/SAC\nCode', 'Qty.', 'Unit', 'Price', 'Amount(`)']];
-    const data = [  ['1', `${pdfData.Description_Of_Goods} (${pdfData.Pipe_Size})`, `${pdfData.HSN_Number}`, `${pdfData.Quantity}`, 'Kgs.', `${pdfData.Price}`, `${pdfData.Total_Price}`]   ];
+    const data = [  ['1', `${pdfData.Description_Of_Goods} (${pdfData.Pipe_Size})`, `${pdfData.HSN_Number}`, `${pdfData.Quantity}`, `${pdfData.Units}`, `${pdfData.Price}`, `${pdfData.Total_Price}`]   ];
 
     doc.setFontSize(11);
     const cellPadding = 5
@@ -200,7 +200,7 @@ const setTotalAmount = (doc, pdfData, yCoordinate,lastcolumnWidth) =>{
     doc.rect(10, yCoordinate, doc.internal.pageSize.getWidth() -20, 24 )
     doc.rect(dividerCoordinate, yCoordinate, lastcolumnWidth, 12)
 
-    const grandTotalText = [`Grand Total\t ${pdfData.Quantity}  Kgs.`]
+    const grandTotalText = [`Grand Total\t ${pdfData.Quantity}  ${pdfData.Units}`]
     const grandTotalValue = [`${pdfData.Net_Bill_Amount}`] 
     yCoordinate += 5
     let xCoordinate = 15;
