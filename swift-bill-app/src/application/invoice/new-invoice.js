@@ -207,7 +207,7 @@ const New = () => {
   };
 
   const validateInputs = (value) => {
-    setError((error) => ({ ...error, gstError: ((value.GST_Number.length !== 15 || value.GST_Number !== 'URP') && !/^[A-Za-z0-9]*$/.test(value.GST_Number))}))
+    setError((error) => ({ ...error, gstError: (!( value.GST_Number === 'URP' || (value.GST_Number.length === 15 && /^[A-Za-z0-9]*$/.test(value.GST_Number))))}))
     setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
     setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
   }
@@ -243,7 +243,7 @@ const New = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Autocomplete
-             disabled={placeOfSupply!==''} 
+             disabled={selectedClientDetails.PlaceOfSupply!==''}
              disablePortal
              id="combo-box-demo"
              options={placeOfSupplyValues}
