@@ -385,17 +385,17 @@ const New = () => {
             label="Pipe Size (inch)"
             onChange={(event) => setPipeSize(event.target.value)}
           >
-            <MenuItem value={10}>2"</MenuItem>
-            <MenuItem value={20}>3"</MenuItem>
-            <MenuItem value={30}>4"</MenuItem>
-            <MenuItem value={40}>5"</MenuItem>
-            <MenuItem value={50}>6"</MenuItem>
-            <MenuItem value={60}>7"</MenuItem>
-            <MenuItem value={70}>8"</MenuItem>
-            <MenuItem value={80}>9"</MenuItem>
-            <MenuItem value={90}>10"</MenuItem>
-            <MenuItem value={100}>11"</MenuItem>
-            <MenuItem value={110}>12"</MenuItem>
+            <MenuItem value={"2\""}>2"</MenuItem>
+            <MenuItem value={"3\""}>3"</MenuItem>
+            <MenuItem value={"4\""}>4"</MenuItem>
+            <MenuItem value={"5\""}>5"</MenuItem>
+            <MenuItem value={"6\""}>6"</MenuItem>
+            <MenuItem value={"7\""}>7"</MenuItem>
+            <MenuItem value={"8\""}>8"</MenuItem>
+            <MenuItem value={"9\""}>9"</MenuItem>
+            <MenuItem value={"10\""}>10"</MenuItem>
+            <MenuItem value={"11\""}>11"</MenuItem>
+            <MenuItem value={"12\""}>12"</MenuItem>
           </Select>
         </FormControl>
         </Grid>
