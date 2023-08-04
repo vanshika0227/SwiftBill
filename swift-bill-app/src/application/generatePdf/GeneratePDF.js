@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { setBillHeader, setInvoiceDetails, setAddresses, setInVoiceAmount, setGstCalculations, setTotalAmount, setFooters } from './pdfData';
+import { setBillHeader, setInvoiceDetails, setAddresses, setInVoiceAmount, setGstCalculations, setTotalAmount, setFooters, setBankDetails } from './pdfData';
 
 
 export default function GeneratePDF(props) {
@@ -19,7 +19,10 @@ export default function GeneratePDF(props) {
     let tableCoordinates = setInVoiceAmount(doc, pdfData, yCoordinate);
     yCoordinate = tableCoordinates.finalY
     let lastcolumnWidth = tableCoordinates.columns[tableCoordinates.columns.length-1].width
+    setBankDetails(doc, yCoordinate);
     yCoordinate = setGstCalculations(doc, pdfData, yCoordinate, lastcolumnWidth);
+   
+
     yCoordinate = setTotalAmount(doc, pdfData, yCoordinate, lastcolumnWidth);
     yCoordinate = setFooters(doc, pdfData, yCoordinate);
     

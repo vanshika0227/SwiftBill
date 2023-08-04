@@ -160,6 +160,14 @@ const setInVoiceAmount = (doc, pdfData, yCoordinate) => {
       return doc.lastAutoTable;
 }
 
+const setBankDetails = (doc, yCoordinate) => {
+    const bankDetails = ['State Bank of India', 'A/C: 65197697331', 'IFSC: SBIN0050725', 'Ratia'];
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'italic');
+    doc.text(bankDetails, 15, yCoordinate + 7,{align: 'left'})
+}
+
 const setGstCalculations = (doc, pdfData, yCoordinate, lastcolumnWidth) =>{
     let dividerCoordinate = doc.internal.pageSize.getWidth()-lastcolumnWidth -10
     doc.rect(10, yCoordinate,  dividerCoordinate-10, 23)
@@ -200,7 +208,7 @@ const setTotalAmount = (doc, pdfData, yCoordinate,lastcolumnWidth) =>{
     doc.rect(10, yCoordinate, doc.internal.pageSize.getWidth() -20, 24 )
     doc.rect(dividerCoordinate, yCoordinate, lastcolumnWidth, 12)
 
-    const grandTotalText = [`Grand Total\t ${pdfData.Quantity}  ${pdfData.Units}`]
+    const grandTotalText = [`Grand Total\t`]
     const grandTotalValue = [`${pdfData.Net_Bill_Amount}`] 
     yCoordinate += 5
     let xCoordinate = 15;
@@ -270,6 +278,7 @@ module.exports = {
     setInvoiceDetails,
     setAddresses,
     setInVoiceAmount,
+    setBankDetails,
     setGstCalculations,
     setTotalAmount,
     setFooters
