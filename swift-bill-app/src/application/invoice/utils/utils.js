@@ -49,6 +49,10 @@ const quantityUnit = [
   {
     value: 'Pieces',
     label: 'Pcs',
+  },
+  {
+    value: 'Not Required',
+    label: 'N/A',
   }
 ];
 

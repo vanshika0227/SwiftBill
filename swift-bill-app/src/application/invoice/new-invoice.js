@@ -14,13 +14,10 @@ import { calculateBill } from './utils/priceCalculate';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import InputAdornment from '@mui/material/InputAdornment';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { getDateFormat, getCommaSeparatedAmount,getAmountInWords,quantityUnit } from './utils/utils';
+import { getDateFormat, getCommaSeparatedAmount,getAmountInWords } from './utils/utils';
 import { styled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
+import GoodDetails from './components/GoodDetails';
 
 const Div = styled('div')(({ theme }) => ({
   ...theme.typography.h4,
@@ -111,17 +108,20 @@ const New = () => {
   const [billingAddress, setBillingAddress] = useState('');
   const [shippingAddress, setShippingAddress] = useState('');
   const [shippingSameAsBilling, setShippingSameAsBilling] = useState(false);
-  const [descriptionOfGoods, setDescription] = useState('');
-  const [pipeSize, setPipeSize] = useState('');
-  const [price, setPrice] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [units, setUnits] = useState('Kgs');
   const [vehicleNumber, setVehicleNumber] = useState('');
-  const [hsnNumber, setHsnNumber] = useState('');
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [date, setDate] = useState(new Date());
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [pdfInputs, setPdfInputs] = useState([{}])
+  const [pdfInputs, setPdfInputs] = useState([{}]);
+  const [goodDetails, setGoodDetails] = useState([{
+    Pipe_Size: '',
+    Price: '',
+    Quantity: '',
+    Units:'Kgs',
+    HSN_Number: '',
+    Description_Of_Goods: ''
+  }]);
+
   const [error, setError] = useState({
     gstError: false,
     quantityError: false,
@@ -135,15 +135,15 @@ const New = () => {
     GST_Type: GST_Type,
     Billing_Address: billingAddress,
     Shipping_Address: shippingAddress,
-    Pipe_Size: pipeSize,
-    Price: price,
-    Quantity: quantity,
-    Units: units,
     Vehicle_Number: vehicleNumber,
-    HSN_Number: hsnNumber,
     Invoice_Number: invoiceNumber,
     Date: date,
-    Description_Of_Goods: descriptionOfGoods
+    Pipe_Size: goodDetails.pipeSize,
+    Price: goodDetails.price,
+    Quantity: goodDetails.quantity,
+    Units: goodDetails.units,
+    HSN_Number: goodDetails.hsnNumber,
+    Description_Of_Goods: goodDetails.descriptionOfGoods
   }]
 
   useEffect(() => {
@@ -153,13 +153,7 @@ const New = () => {
     setBillingAddress(selectedClientDetails.Billing_Address);
     setShippingSameAsBilling(false);
     setShippingAddress('');
-    setDescription('');
-    setPipeSize('');
-    setPrice('');
-    setQuantity('');
-    setUnits('Kgs');
     setVehicleNumber('');
-    setHsnNumber('');
     setInvoiceNumber('');
     setDate(new Date());
     setError({
@@ -213,6 +207,7 @@ const New = () => {
     setError((error) => ({ ...error, gstError: (!( value.GST_Number === 'URP' || (value.GST_Number.length === 15 && /^[A-Za-z0-9]*$/.test(value.GST_Number))))}))
     setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
     setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
+      
   }
 
   const handleShippingSameAsBillingChange = (event) => {
@@ -353,99 +348,16 @@ const New = () => {
             inputProps={{ style: { textTransform: "uppercase" }, maxLength: 15 }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="HSN Number"
-            type="number"
-            value={hsnNumber}
-            required={true}
-            onChange={(event) => setHsnNumber(event.target.value)}
-            fullWidth
-          />
-        </Grid>
         <Grid item xs={12} sm={12}>
           <Div variant="h4" component="h4">Goods Details </Div>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Description of Goods"
-            value={descriptionOfGoods}
-            required={true}
-            onChange={(event) => setDescription(event.target.value)}
-            fullWidth
-          />
+        <Grid item xs={12} sm={12}>
+          <GoodDetails priceError={error.priceError} quantityError={error.quantityError} handleGoodDetails={(data) => setGoodDetails(data)}></GoodDetails>
         </Grid>
-        <Grid item xs={12} sm={6}>
-        <FormControl fullWidth required>
-          <InputLabel id="demo-simple-select-label">Pipe Size (inch)</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={pipeSize}
-            label="Pipe Size (inch)"
-            onChange={(event) => setPipeSize(event.target.value)}
-          >
-            <MenuItem value={"2\""}>2"</MenuItem>
-            <MenuItem value={"3\""}>3"</MenuItem>
-            <MenuItem value={"4\""}>4"</MenuItem>
-            <MenuItem value={"5\""}>5"</MenuItem>
-            <MenuItem value={"6\""}>6"</MenuItem>
-            <MenuItem value={"7\""}>7"</MenuItem>
-            <MenuItem value={"8\""}>8"</MenuItem>
-            <MenuItem value={"9\""}>9"</MenuItem>
-            <MenuItem value={"10\""}>10"</MenuItem>
-            <MenuItem value={"11\""}>11"</MenuItem>
-            <MenuItem value={"12\""}>12"</MenuItem>
-          </Select>
-        </FormControl>
-        </Grid>
-        <Grid item xs={9.6} sm={5}>
-          <TextField
-            error={error.quantityError}
-            helperText="Quantity upto 2 decimal places only"
-            label="Quantity"
-            type="number"
-            value={quantity}
-            required={true}
-            onChange={(event) => setQuantity(event.target.value)}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={2.4} sm={1}>
-          <TextField
-             required
-             label="Units"
-             fullWidth
-             select
-             value={units}
-             onChange={(event) => setUnits(event.target.value)}
-          >
-            {quantityUnit.map((option) => (
-            <MenuItem key={option.value} value={option.label}>
-              {option.label}
-            </MenuItem>
-          ))}
-
-          </TextField>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            error={error.priceError}
-            helperText="Price upto 2 decimal places only"
-            label="Price"
-            type="number"
-            value={price}
-            required={true}
-            onChange={(event) => setPrice(event.target.value)}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <CurrencyRupeeIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <Grid item xs={12} sm={12}>
+          <Button variant="outlined" size="large" startIcon={<AddIcon/>}  onClick={() => {}}>
+            Add a row
+          </Button>
         </Grid>
         <Grid item xs={12} style={{textAlign: 'center'}}>
           <Button type="submit" variant="contained" color="primary" size="large">
