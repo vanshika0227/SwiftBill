@@ -41,12 +41,25 @@ const GoodDetails = (props) => {
 
   const handleChange = (event) => {
     let value = event[0];
-    setDescription(value.Description_Of_Goods);
-    setPipeSize(value.Pipe_Size);
-    setPrice(value.Price);
-    setQuantity(value.quantity);
-    setUnits(value.Units);
-    setHsnNumber(value.HSN_Number);
+    console.log(formOutput);
+    if(value.Description_Of_Goods){
+      setDescription(value.Description_Of_Goods);
+    }
+    if(value.Pipe_Size){
+      setPipeSize(value.Pipe_Size);
+    }
+    if(value.Price){
+      setPrice(value.Price);
+    }
+    if(value.Quantity){
+      setQuantity(value.Quantity);
+    }
+    if(value.Units){
+      setUnits(value.Units);
+    }
+    if(value.HSN_Number){
+      setHsnNumber(value.HSN_Number);
+    }
     props.handleGoodDetails(formOutput)
   }
  
@@ -58,7 +71,7 @@ const GoodDetails = (props) => {
             label="Description of Goods"
             value={descriptionOfGoods}
             required={true}
-            onChange={(event) => handleChange([{...formOutput, Description_Of_Goods: event.target.value}])}
+            onChange={(event) => handleChange([{Description_Of_Goods: event.target.value}])}
             fullWidth
           />
         </Grid>
@@ -69,7 +82,7 @@ const GoodDetails = (props) => {
               type="number"
               value={hsnNumber}
               required={true}
-              onChange={(event) => handleChange([{...formOutput, HSN_Number: event.target.value}])}
+              onChange={(event) => handleChange([{HSN_Number: event.target.value}])}
               fullWidth
             />
         </Grid>
@@ -81,7 +94,7 @@ const GoodDetails = (props) => {
             id="demo-simple-select"
             value={pipeSize}
             label="Pipe Size (inch)"
-            onChange={(event) => handleChange(event.target.value === "-" ? [{...formOutput, Pipe_Size: ''}]: [{...formOutput, Pipe_Size: event.target.value}])}
+            onChange={(event) => handleChange(event.target.value === "-" ? [{Pipe_Size: ''}]: [{Pipe_Size: event.target.value}])}
           >
             <MenuItem value={"-"}>N/A</MenuItem>
             <MenuItem value={"(2\")"}>2"</MenuItem>
@@ -106,7 +119,7 @@ const GoodDetails = (props) => {
             type="number"
             value={quantity}
             required={true}
-            onChange={(event) => handleChange([{...formOutput, Quantity: event.target.value}])}
+            onChange={(event) => handleChange([{Quantity: event.target.value}])}
             fullWidth
           />
         </Grid>
@@ -117,7 +130,7 @@ const GoodDetails = (props) => {
               fullWidth
               select
               value={units}
-              onChange={(event) => handleChange([{...formOutput, Units: event.target.value}])}
+              onChange={(event) => handleChange([{Units: event.target.value}])}
           >
             {quantityUnit.map((option) => (
             <MenuItem key={option.value} value={option.label}>
@@ -135,7 +148,7 @@ const GoodDetails = (props) => {
             type="number"
             value={price}
             required={true}
-            onChange={(event) => handleChange([{...formOutput, Price: event.target.value}])}
+            onChange={(event) => handleChange([{Price: event.target.value}])}
             fullWidth
             InputProps={{
               startAdornment: (

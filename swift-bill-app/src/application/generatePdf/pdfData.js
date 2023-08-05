@@ -121,7 +121,11 @@ const setAddresses = (doc, pdfData, yCoordinate) => {
 const setInVoiceAmount = (doc, pdfData, yCoordinate) => {
     
     const headers = [['S.No.', 'Description of Goods', 'HSN/SAC\nCode', 'Qty.', 'Unit', 'Price', 'Amount(`)']];
-    const data = [  ['1', `${pdfData.Description_Of_Goods} ${pdfData.Pipe_Size}`, `${pdfData.HSN_Number}`, `${pdfData.Quantity}`, `${pdfData.Units}`, `${pdfData.Price}`, `${pdfData.Total_Price}`]   ];
+    const data =[]
+    pdfData.GoodDetails.forEach((detail, index) => {
+        data.push([`${index+1}`, `${detail.Description_Of_Goods} ${detail.Pipe_Size}`, `${detail.HSN_Number}`, `${detail.Quantity}`, `${detail.Units}`, `${detail.Price}`, `${detail.Good_Total_Price}`] )
+
+    });
 
     doc.setFontSize(11);
     const cellPadding = 5

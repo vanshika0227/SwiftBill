@@ -99,10 +99,10 @@ const isNumberUpto2Decimal = (value) => {
 
 const New = () => {
   const dispatch = useDispatch();
-  const selectedClientName = useSelector((state) => state.allClients.selectedClientName)
+  const selectedClientName = useSelector((state) => 'Vanshike')
   const selectedClientDetails = useSelector((state) => state.allClients.selectedClientDetails)
   const isUpdateClient = useSelector((state) => state.allClients.isUpdateClient)
-  const [GSTNumber, setGSTnumber] = useState('');
+  const [GSTNumber, setGSTnumber] = useState('URP');
   const [placeOfSupply, setPlaceOfSupply] = useState('');
   const [GST_Type, setGSTtype] = useState('');
   const [billingAddress, setBillingAddress] = useState('');
@@ -138,13 +138,12 @@ const New = () => {
     Vehicle_Number: vehicleNumber,
     Invoice_Number: invoiceNumber,
     Date: date,
-    Pipe_Size: goodDetails.pipeSize,
-    Price: goodDetails.price,
-    Quantity: goodDetails.quantity,
-    Units: goodDetails.units,
-    HSN_Number: goodDetails.hsnNumber,
-    Description_Of_Goods: goodDetails.descriptionOfGoods
+    GoodDetails: goodDetails
   }]
+
+  console.log('goodDetails');
+  console.log(goodDetails);
+  console.log(formOutput);
 
   useEffect(() => {
     setGSTnumber(selectedClientDetails.GST_number);
@@ -191,6 +190,9 @@ const New = () => {
       ...formOutput[0]
     }
 
+    console.log('billValues');
+    console.log(billValues);
+
     allValues.Date = getDateFormat(allValues.Date);
     allValues.Amount_Words = getAmountInWords(allValues.Net_Bill_Amount);
     allValues.Net_Bill_Amount = getCommaSeparatedAmount(allValues.Net_Bill_Amount);
@@ -199,14 +201,20 @@ const New = () => {
     allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
     allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
     allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
+    allValues.GoodDetails.forEach((detail) => {
+      detail.Good_Total_Price = getCommaSeparatedAmount(detail.Good_Total_Price);
+    })
     setPdfInputs([allValues])   
     setFormSubmitted(true);
   };
 
   const validateInputs = (value) => {
     setError((error) => ({ ...error, gstError: (!( value.GST_Number === 'URP' || (value.GST_Number.length === 15 && /^[A-Za-z0-9]*$/.test(value.GST_Number))))}))
-    setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(value.Price)}))
-    setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(value.Quantity)}))
+    value.GoodDetails.forEach((detail) => {
+      setError((error) => ({ ...error, priceError: isNumberUpto2Decimal(detail.Price)}))
+      setError((error) => ({ ...error, quantityError: isNumberUpto2Decimal(detail.Quantity)}))
+    })
+    
       
   }
 

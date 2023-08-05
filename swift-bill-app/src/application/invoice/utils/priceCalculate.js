@@ -21,11 +21,21 @@ const roundOffAmount = (billAmount) => {
 
 const calculateBill = (data) => {
 
-    let price = parseFloat(data.Price);
-    let quantity = parseFloat(data.Quantity);
+    console.log('data');
+    console.log(data);
     let GST_Type = data.GST_Type;
     let totalBillValues = {}
-    let totalPrice = ((price)*(quantity)).toFixed(2);
+    let totalPrice = 0
+    
+    data.GoodDetails.forEach((detail) => {
+        let price = parseFloat(detail.Price);
+        let quantity = parseFloat(detail.Quantity);
+        let goodTotalPrice = ((price)*(quantity));
+        detail.Good_Total_Price = goodTotalPrice.toFixed(2);
+        totalPrice += goodTotalPrice;
+    });
+
+    totalPrice = totalPrice.toFixed(2);
 
     if(GST_Type === 'IGST'){
         let totalGST = (totalPrice*0.18).toFixed(2);
@@ -56,8 +66,7 @@ const calculateBill = (data) => {
         ...roundOffValues
     };
 
-    return totalBillValues;
-
+    return {...data, ...totalBillValues};
 }
  module.exports = {
     calculateBill
