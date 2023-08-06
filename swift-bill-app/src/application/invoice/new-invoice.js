@@ -113,14 +113,14 @@ const New = () => {
   const [date, setDate] = useState(new Date());
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [pdfInputs, setPdfInputs] = useState([{}]);
-  const [goodDetails, setGoodDetails] = useState([{
+  const [goodDetails, setGoodDetails] = useState({
     Pipe_Size: '',
     Price: '',
     Quantity: '',
     Units:'Kgs',
     HSN_Number: '',
     Description_Of_Goods: ''
-  }]);
+  });
 
   const [error, setError] = useState({
     gstError: false,
@@ -138,7 +138,7 @@ const New = () => {
     Vehicle_Number: vehicleNumber,
     Invoice_Number: invoiceNumber,
     Date: date,
-    GoodDetails: goodDetails
+    GoodDetails: [goodDetails]
   }]
 
   console.log('goodDetails');
@@ -197,12 +197,12 @@ const New = () => {
     allValues.Amount_Words = getAmountInWords(allValues.Net_Bill_Amount);
     allValues.Net_Bill_Amount = getCommaSeparatedAmount(allValues.Net_Bill_Amount);
     allValues.Total_Price = getCommaSeparatedAmount(allValues.Total_Price);
-    allValues.Price = getCommaSeparatedAmount(allValues.Price);
     allValues.IGST_Amount = getCommaSeparatedAmount(allValues.IGST_Amount);
     allValues.CGST_Amount = getCommaSeparatedAmount(allValues.CGST_Amount);
     allValues.SGST_Amount = getCommaSeparatedAmount(allValues.SGST_Amount);
     allValues.GoodDetails.forEach((detail) => {
       detail.Good_Total_Price = getCommaSeparatedAmount(detail.Good_Total_Price);
+      detail.Price = getCommaSeparatedAmount(detail.Price);
     })
     setPdfInputs([allValues])   
     setFormSubmitted(true);

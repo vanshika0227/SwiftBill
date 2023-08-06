@@ -30,38 +30,43 @@ const GoodDetails = (props) => {
     setHsnNumber('');
   }, [selectedClientDetails]);
 
-  const formOutput = [{
+  let formOutput = {
     Pipe_Size: pipeSize,
     Price: price,
     Quantity: quantity,
     Units: units,
     HSN_Number: hsnNumber,
     Description_Of_Goods: descriptionOfGoods
-  }]
+  };
 
-  const handleChange = (event) => {
-    let value = event[0];
+  const handleChange = (value) => {
     console.log(formOutput);
     if(value.Description_Of_Goods){
       setDescription(value.Description_Of_Goods);
+      formOutput = {...formOutput, Description_Of_Goods: value.Description_Of_Goods};
     }
-    if(value.Pipe_Size){
+    if(value.Pipe_Size || value.Pipe_Size === ""){
       setPipeSize(value.Pipe_Size);
+      formOutput = {...formOutput, Pipe_Size: value.Pipe_Size};
     }
     if(value.Price){
       setPrice(value.Price);
+      formOutput = {...formOutput, Price: value.Price};
     }
     if(value.Quantity){
       setQuantity(value.Quantity);
+      formOutput = {...formOutput, Quantity: value.Quantity};
     }
     if(value.Units){
       setUnits(value.Units);
+      formOutput = {...formOutput, Units: value.Units};
     }
     if(value.HSN_Number){
       setHsnNumber(value.HSN_Number);
+      formOutput = {...formOutput, HSN_Number: value.HSN_Number};
     }
     props.handleGoodDetails(formOutput)
-  }
+  };
  
 
   return (
@@ -71,7 +76,7 @@ const GoodDetails = (props) => {
             label="Description of Goods"
             value={descriptionOfGoods}
             required={true}
-            onChange={(event) => handleChange([{Description_Of_Goods: event.target.value}])}
+            onChange={(event) => handleChange({Description_Of_Goods: event.target.value})}
             fullWidth
           />
         </Grid>
@@ -82,7 +87,7 @@ const GoodDetails = (props) => {
               type="number"
               value={hsnNumber}
               required={true}
-              onChange={(event) => handleChange([{HSN_Number: event.target.value}])}
+              onChange={(event) => handleChange({HSN_Number: event.target.value})}
               fullWidth
             />
         </Grid>
@@ -94,9 +99,9 @@ const GoodDetails = (props) => {
             id="demo-simple-select"
             value={pipeSize}
             label="Pipe Size (inch)"
-            onChange={(event) => handleChange(event.target.value === "-" ? [{Pipe_Size: ''}]: [{Pipe_Size: event.target.value}])}
+            onChange={(event) => handleChange({Pipe_Size: event.target.value})}
           >
-            <MenuItem value={"-"}>N/A</MenuItem>
+            <MenuItem value=""><em>N/A</em></MenuItem>
             <MenuItem value={"(2\")"}>2"</MenuItem>
             <MenuItem value={"(3\")"}>3"</MenuItem>
             <MenuItem value={"(4\")"}>4"</MenuItem>
@@ -119,7 +124,7 @@ const GoodDetails = (props) => {
             type="number"
             value={quantity}
             required={true}
-            onChange={(event) => handleChange([{Quantity: event.target.value}])}
+            onChange={(event) => handleChange({Quantity: event.target.value})}
             fullWidth
           />
         </Grid>
@@ -130,7 +135,7 @@ const GoodDetails = (props) => {
               fullWidth
               select
               value={units}
-              onChange={(event) => handleChange([{Units: event.target.value}])}
+              onChange={(event) => handleChange({Units: event.target.value})}
           >
             {quantityUnit.map((option) => (
             <MenuItem key={option.value} value={option.label}>
@@ -148,7 +153,7 @@ const GoodDetails = (props) => {
             type="number"
             value={price}
             required={true}
-            onChange={(event) => handleChange([{Price: event.target.value}])}
+            onChange={(event) => handleChange({Price: event.target.value})}
             fullWidth
             InputProps={{
               startAdornment: (
